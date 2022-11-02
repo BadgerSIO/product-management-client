@@ -16,10 +16,12 @@ const Categories = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          const currentCats = storedCategories.filter(
-            (cat) => cat._id !== cate._id
-          );
-          setCategories(currentCats);
+          if (data.deletedCount > 0) {
+            const currentCats = storedCategories.filter(
+              (cat) => cat._id !== cate._id
+            );
+            setCategories(currentCats);
+          }
         });
     }
   };
