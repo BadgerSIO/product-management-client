@@ -18,8 +18,9 @@ const AddCategory = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.acknowledged) {
-          toast.success("New category added");
+          toast.success(`${category.name} category added`);
           form.reset();
+          setCategory({});
         }
       });
   };

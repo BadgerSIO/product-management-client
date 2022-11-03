@@ -1,6 +1,9 @@
 import AddCategory from "../pages/AddCategory/AddCategory";
+import AddProducts from "../pages/AddProducts/AddProducts";
 import Categories from "../pages/Categories/Categories";
+import Login from "../pages/Login/Login";
 import ProductList from "../pages/ProductList/ProductList";
+import PrivateRoute from "./PrivateRoute";
 
 const { createBrowserRouter } = require("react-router-dom");
 const { default: Main } = require("../layouts/Main");
@@ -8,7 +11,11 @@ const { default: Main } = require("../layouts/Main");
 export const routes = createBrowserRouter([
   {
     path: "/",
-    element: <Main></Main>,
+    element: (
+      <PrivateRoute>
+        <Main></Main>
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "/",
@@ -23,7 +30,15 @@ export const routes = createBrowserRouter([
         loader: () => fetch(`http://localhost:5000/categories`),
         element: <Categories></Categories>,
       },
+      {
+        path: "/addproducts",
+        element: <AddProducts></AddProducts>,
+      },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login></Login>,
   },
   {
     path: "*",

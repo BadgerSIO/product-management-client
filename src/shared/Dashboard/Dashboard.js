@@ -38,7 +38,10 @@ const Dashboard = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink className="focus:bg-theme focus:text-white">
+            <NavLink
+              className="focus:bg-theme focus:text-white "
+              to="/addproducts"
+            >
               <FaCartPlus />
               Add Product
             </NavLink>

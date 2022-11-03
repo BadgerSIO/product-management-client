@@ -1,7 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { FaUser } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Header = () => {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const logOut = () => {
+    logout().then(() => {
+      navigate("/login");
+    });
+  };
   return (
     <div className="navbar bg-base-100 border-b border-b-gray-100 pl-5">
       <div className="flex-1"></div>
@@ -42,7 +51,11 @@ const Header = () => {
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
-              <img src="https://placeimg.com/80/80/people" alt="" />
+              {user?.photoURL ? (
+                <img src={user?.photoURL} alt="" />
+              ) : (
+                <FaUser />
+              )}
             </div>
           </label>
           <ul
@@ -59,7 +72,7 @@ const Header = () => {
               <Link>Settings</Link>
             </li>
             <li>
-              <Link>Logout</Link>
+              <button onClick={logOut}>Logout</button>
             </li>
           </ul>
         </div>
