@@ -10,7 +10,7 @@ const Category = ({ cat, deleteItem }) => {
     <div className="grid space-y-5 md:space-y-0 md:grid-cols-3 xl:grid-cols-4 xl:gap-5 py-3 px-3 bg-white border-t border-t-gray-200 md:border-t-0 border-x border-x-gray-200 border-b border-b-gray-200 content-start">
       <div className="xl:col-span-1 flex items-start space-x-3">
         {" "}
-        <div className="flex items-center">
+        <div className="flex items-center capitalize">
           <img
             src={photoUrl ? photoUrl : defaultUrl}
             alt="name"

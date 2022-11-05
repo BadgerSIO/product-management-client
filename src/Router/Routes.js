@@ -1,13 +1,14 @@
 import AddCategory from "../pages/AddCategory/AddCategory";
 import AddProducts from "../pages/AddProducts/AddProducts";
 import Categories from "../pages/Categories/Categories";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Login from "../pages/Login/Login";
 import ProductList from "../pages/ProductList/ProductList";
+import Register from "../pages/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 
 const { createBrowserRouter } = require("react-router-dom");
 const { default: Main } = require("../layouts/Main");
-
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -27,7 +28,6 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/categories",
-        loader: () => fetch(`http://localhost:5000/categories`),
         element: <Categories></Categories>,
       },
       {
@@ -41,11 +41,11 @@ export const routes = createBrowserRouter([
     element: <Login></Login>,
   },
   {
+    path: "/register",
+    element: <Register></Register>,
+  },
+  {
     path: "*",
-    element: (
-      <div>
-        <h1>Page not found</h1>
-      </div>
-    ),
+    element: <ErrorPage></ErrorPage>,
   },
 ]);

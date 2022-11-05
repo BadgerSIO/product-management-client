@@ -1,10 +1,54 @@
-import React, { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 import Category from "./Category";
 
 const Categories = () => {
-  const storedCategories = useLoaderData();
-  const [categories, setCategories] = useState(storedCategories);
+  const [categories, setCategories] = useState([]);
+  const { user, logout, loading } = useContext(AuthContext);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     fetch(`http://localhost:5000/categories?email=${user?.email}`, {
+  //       headers: {
+  //         authorization: `Bearer ${localStorage.getItem("pmToken")}`,
+  //       },
+  //     })
+  //       .then((res) => {
+  //         if (res.status === 401 || res.status === 403) {
+  //           localStorage.removeItem("pmToken");
+  //           return logout();
+  //         }
+  //         return res.json();
+  //       })
+  //       .then((data) => {
+  //         setCategories(data);
+  //       });
+  //   }, 1000);
+  //   return () => clearTimeout(timer);
+  // }, [user?.email, logout]);
+
+  // without setTimeout
+
+  useEffect(() => {
+    if (user?.email) {
+      fetch(`http://localhost:5000/categories?email=${user?.email}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("pmToken")}`,
+        },
+      })
+        .then((res) => {
+          if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem("pmToken");
+            return logout();
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setCategories(data);
+        });
+    }
+  }, [user?.email, logout]);
+
   const deleteItem = (cate) => {
     const affirm = window.confirm(
       `Are you sure you want to delete ${cate.name}`

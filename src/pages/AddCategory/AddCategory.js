@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
+import { AuthContext } from "../../context/AuthProvider";
 
 const AddCategory = () => {
   const [category, setCategory] = useState({});
+  const { user } = useContext(AuthContext);
 
   const handleCatSubmit = (e) => {
     e.preventDefault();
+    category["user"] = user.email;
     const form = e.target;
     fetch(`http://localhost:5000/addCategory`, {
       method: "POST",
