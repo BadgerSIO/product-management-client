@@ -1,9 +1,12 @@
 import React from "react";
+import { useContext } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Category = ({ cat, deleteItem }) => {
   const { name, description, photoUrl } = cat;
+  const { user } = useContext(AuthContext);
   const defaultUrl =
     "https://dreamspos.dreamguystech.com/laravel/template/public/assets/img/product/noimage.png";
   return (
@@ -22,7 +25,10 @@ const Category = ({ cat, deleteItem }) => {
       <div className="xl:col-span-2  flex items-center">{description}</div>
       <div className="xl:col-span-1 flex items-start">
         <div className="flex items-center">
-          <Link className="py-2 px-3 text-white bg-themeSecond text-sm rounded hover:bg-theme mr-2">
+          <Link
+            to={`/updateCategory/${cat._id}?email=${user?.email}`}
+            className="py-2 px-3 text-white bg-themeSecond text-sm rounded hover:bg-theme mr-2"
+          >
             <button className="flex items-center ">
               <FaEdit className="mr-1 text-sm -mt-1" /> Update
             </button>

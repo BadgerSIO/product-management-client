@@ -5,40 +5,19 @@ import Category from "./Category";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
-  const { user, logout, loading } = useContext(AuthContext);
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     fetch(`http://localhost:5000/categories?email=${user?.email}`, {
-  //       headers: {
-  //         authorization: `Bearer ${localStorage.getItem("pmToken")}`,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         if (res.status === 401 || res.status === 403) {
-  //           localStorage.removeItem("pmToken");
-  //           return logout();
-  //         }
-  //         return res.json();
-  //       })
-  //       .then((data) => {
-  //         setCategories(data);
-  //       });
-  //   }, 1000);
-  //   return () => clearTimeout(timer);
-  // }, [user?.email, logout]);
-
-  // without setTimeout
-
+  const { user, logout } = useContext(AuthContext);
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:5000/categories?email=${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("pmToken")}`,
-        },
-      })
+      fetch(
+        `https://product-management-server-omega.vercel.app/categories?email=${user?.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("pmToken")}`,
+          },
+        }
+      )
         .then((res) => {
           if (res.status === 401 || res.status === 403) {
-            localStorage.removeItem("pmToken");
             return logout();
           }
           return res.json();
@@ -54,9 +33,12 @@ const Categories = () => {
       `Are you sure you want to delete ${cate.name}`
     );
     if (affirm) {
-      fetch(`http://localhost:5000/deleteCat/${cate._id}`, {
-        method: "DELETE",
-      })
+      fetch(
+        `https://product-management-server-omega.vercel.app/deleteCat/${cate._id}`,
+        {
+          method: "DELETE",
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
@@ -106,7 +88,6 @@ const Categories = () => {
       <p className="p-5">
         No categories found. Create categories
         <Link to="/addcategory" className="text-theme">
-          {" "}
           here
         </Link>
       </p>

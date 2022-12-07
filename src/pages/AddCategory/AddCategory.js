@@ -11,7 +11,7 @@ const AddCategory = () => {
     e.preventDefault();
     category["user"] = user.email;
     const form = e.target;
-    fetch(`http://localhost:5000/addCategory`, {
+    fetch(`https://product-management-server-omega.vercel.app/addCategory`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

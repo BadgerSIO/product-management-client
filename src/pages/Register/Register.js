@@ -1,22 +1,12 @@
-import { GoogleAuthProvider } from "firebase/auth";
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+import GoogleFbSignUp from "../../shared/GoogleFbSignUp/GoogleFbSignUp";
 
 const Register = () => {
-  const { googleSingIn, register, updateUser } = useContext(AuthContext);
-  const googleProvider = new GoogleAuthProvider();
-  const navigate = useNavigate();
+  const { register, updateUser } = useContext(AuthContext);
 
-  const handleGoogle = (e) => {
-    e.preventDefault();
-    googleSingIn(googleProvider)
-      .then((result) => {
-        console.log(result.user);
-        navigate("/");
-      })
-      .catch((err) => console.log(err));
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +18,23 @@ const Register = () => {
     const profile = { displayName: displayName, photoURL: photoURL };
     register(email, password)
       .then((res) => {
-        console.log(res.user);
+        const user = res.user;
+        const currentUser = {
+          email: user.email,
+        };
+        // get jwt token
+        fetch("https://product-management-server-omega.vercel.app/jwt", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(currentUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("pmToken", data?.token);
+            console.log(data);
+          });
         handleUpdateUser(profile);
       })
       .catch((err) => console.log(err));
@@ -115,17 +121,7 @@ const Register = () => {
               <hr className="my-auto" />
             </div>
 
-            <div className="flex justify-between text-sm space-x-5 ">
-              <button
-                onClick={handleGoogle}
-                className="py-2 w-1/2 border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white"
-              >
-                Sign in with google
-              </button>
-              <button className="py-2 w-1/2 border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white">
-                Sign in with facebook
-              </button>
-            </div>
+            <GoogleFbSignUp></GoogleFbSignUp>
           </form>
         </div>
       </div>

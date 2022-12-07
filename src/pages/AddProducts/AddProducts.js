@@ -19,11 +19,14 @@ const AddProducts = () => {
   } = useForm();
   useEffect(() => {
     if (user?.email) {
-      fetch(`http://localhost:5000/categories?email=${user?.email}`, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("pmToken")}`,
-        },
-      })
+      fetch(
+        `https://product-management-server-omega.vercel.app/categories?email=${user?.email}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("pmToken")}`,
+          },
+        }
+      )
         .then((res) => {
           if (res.status === 401 || res.status === 403) {
             localStorage.removeItem("pmToken");
@@ -36,32 +39,10 @@ const AddProducts = () => {
         });
     }
   }, [user?.email, logout]);
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const form = e.target;
-  //   const pName = form.name.value;
-  //   const pPhoto = form.photoUrl.value;
-  //   const pPrice = form.price.value;
-  //   // cat id
-  //   const index = form.categor.selectedIndex;
-  //   const el = form.childNodes[index];
-  //   const pcatId = el.getAttribute("id");
-  //   // cat id end
-  //   const category = form.categor.value;
-  //   const description = form.description.value;
-  //   console.log(pName, pPhoto, pPrice, category, description, pcid);
-  //   form.reset();
-  //   setPid(null);
-  // };
-  // const handleChange = (e) => {
-  //   const index = e.target.selectedIndex;
-  //   const el = e.target.childNodes[index];
-  //   const option = el.getAttribute("id");
-  //   setPid(option);
-  // };
+
   const onSubmit = (data) => {
     data["user"] = user?.email;
-    fetch("http://localhost:5000/addProduct", {
+    fetch("https://product-management-server-omega.vercel.app/addProduct", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -87,7 +68,6 @@ const AddProducts = () => {
       <div className="pt-5">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          // onSubmit={handleSubmit}
           className="border border-gray-200 p-10 rounded bg-white"
         >
           <div className="grid xl:grid-cols-2 xl:gap-5">
@@ -155,9 +135,9 @@ const AddProducts = () => {
           <br />
           <button
             type="submit"
-            className="flex justify-center items-center py-2 px-3 border border-theme bg-theme text-white rounded hover:scale-95 "
+            className="flex justify-center items-center py-2 px-3 border capitalize border-theme bg-theme text-white rounded hover:scale-95 "
           >
-            <FaPlus className="mr-3"></FaPlus> Add Category
+            <FaPlus className="mr-3"></FaPlus> Add product
           </button>
         </form>
       </div>

@@ -5,6 +5,7 @@ import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import Login from "../pages/Login/Login";
 import ProductList from "../pages/ProductList/ProductList";
 import Register from "../pages/Register/Register";
+import UpdateCategory from "../pages/UpdateCategory/UpdateCategory";
 import PrivateRoute from "./PrivateRoute";
 
 const { createBrowserRouter } = require("react-router-dom");
@@ -33,6 +34,23 @@ export const routes = createBrowserRouter([
       {
         path: "/addproducts",
         element: <AddProducts></AddProducts>,
+      },
+      {
+        path: "/updateCategory/:id",
+        loader: ({ params, request }) => {
+          const url = new URL(request.url);
+          const email = url.searchParams.get("email");
+
+          return fetch(
+            `https://product-management-server-omega.vercel.app/updateCategory/${params.id}?email=${email}`,
+            {
+              headers: {
+                authorization: `Bearer ${localStorage.getItem("pmToken")}`,
+              },
+            }
+          );
+        },
+        element: <UpdateCategory></UpdateCategory>,
       },
     ],
   },

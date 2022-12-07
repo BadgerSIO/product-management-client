@@ -1,21 +1,12 @@
-import { GoogleAuthProvider } from "firebase/auth";
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
+import GoogleFbSignUp from "../../shared/GoogleFbSignUp/GoogleFbSignUp";
 
 const Login = () => {
-  const { googleSingIn, login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const googleProvider = new GoogleAuthProvider();
-  const handleGoogle = (e) => {
-    e.preventDefault();
-    googleSingIn(googleProvider)
-      .then((result) => {
-        console.log(result.user);
-        navigate("/");
-      })
-      .catch((err) => console.log(err));
-  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -27,7 +18,7 @@ const Login = () => {
         email: user.email,
       };
       // get jwt token
-      fetch("http://localhost:5000/jwt", {
+      fetch("https://product-management-server-omega.vercel.app/jwt", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -36,17 +27,16 @@ const Login = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          localStorage.setItem("pmToken", data.token);
+          localStorage.setItem("pmToken", data?.token);
           console.log(data);
+          navigate("/");
         });
-
-      navigate("/");
     });
   };
   return (
-    <div className="grid grid-cols-2 h-screen">
-      <div className=" flex justify-center items-center">
-        <div className="bg-slate-50 rounded-md border border-gray-100 w-full lg:w-3/4 p-10 ">
+    <div className="grid md:grid-cols-2 h-screen">
+      <div className=" flex justify-center items-center bg-slate-50 md:bg-white">
+        <div className="bg-slate-50 rounded-md md:border md:border-gray-100 w-full lg:w-3/4 p-10 ">
           <img
             src="https://dreamspos.dreamguystech.com/laravel/template/public/assets/img/logo.png"
             alt=""
@@ -96,21 +86,11 @@ const Login = () => {
               <hr className="my-auto" />
             </div>
 
-            <div className="flex justify-between text-sm space-x-5 ">
-              <button
-                onClick={handleGoogle}
-                className="py-2 w-1/2 border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white"
-              >
-                Sign in with google
-              </button>
-              <button className="py-2 w-1/2 border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white">
-                Sign in with facebook
-              </button>
-            </div>
+            <GoogleFbSignUp></GoogleFbSignUp>
           </form>
         </div>
       </div>
-      <div>
+      <div className="hidden md:block">
         <img
           src="https://i.ibb.co/wy0YH8R/login-Registration.png"
           alt=""

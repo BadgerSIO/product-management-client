@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -14,10 +15,11 @@ const auth = getAuth(app);
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
-
-  const googleSingIn = (provider) => {
+  const googleProvider = new GoogleAuthProvider();
+  // google sign up
+  const googleSingIn = () => {
     setLoading(true);
-    return signInWithPopup(auth, provider);
+    return signInWithPopup(auth, googleProvider);
   };
 
   // email pass sign in
@@ -39,7 +41,7 @@ const AuthProvider = ({ children }) => {
 
   // logout function
   const logout = () => {
-    setLoading(true);
+    localStorage.removeItem("pmToken");
     return signOut(auth);
   };
   useEffect(() => {
