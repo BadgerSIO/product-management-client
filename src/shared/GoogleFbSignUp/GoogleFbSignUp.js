@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
-
+import { FcGoogle } from "react-icons/fc";
 const GoogleFbSignUp = () => {
   const { googleSingIn } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -34,12 +34,9 @@ const GoogleFbSignUp = () => {
     <div className="flex justify-between text-sm space-x-5 ">
       <button
         onClick={handleGoogle}
-        className="py-2 w-1/2 border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white"
+        className="py-2 w-full border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white flex justify-center items-center"
       >
-        Sign in with google
-      </button>
-      <button className="py-2 w-1/2 border border-gray-300 my-5 hover:bg-theme hover:border-theme hover:text-white">
-        Sign in with facebook
+        <FcGoogle className="mr-2 text-lg" /> Sign in with google
       </button>
     </div>
   );

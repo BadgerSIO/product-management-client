@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import GoogleFbSignUp from "../../shared/GoogleFbSignUp/GoogleFbSignUp";
@@ -6,32 +7,41 @@ import GoogleFbSignUp from "../../shared/GoogleFbSignUp/GoogleFbSignUp";
 const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    login(email, password).then((res) => {
-      const user = res.user;
-      const currentUser = {
-        email: user.email,
-      };
-      // get jwt token
-      fetch("https://product-management-server-omega.vercel.app/jwt", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(currentUser),
+    login(email, password)
+      .then((res) => {
+        const user = res.user;
+        const currentUser = {
+          email: user.email,
+        };
+        // get jwt token
+        fetch("https://product-management-server-omega.vercel.app/jwt", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(currentUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("pmToken", data?.token);
+            console.log(data);
+            navigate("/");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
-        .then((res) => res.json())
-        .then((data) => {
-          localStorage.setItem("pmToken", data?.token);
-          console.log(data);
-          navigate("/");
-        });
-    });
+      .catch((er) => {
+        setError(`${er}`);
+        form.reset();
+      });
   };
   return (
     <div className="grid md:grid-cols-2 h-screen">
@@ -72,6 +82,13 @@ const Login = () => {
             <button className="flex justify-center items-center py-2 px-3 border border-theme bg-theme text-white rounded hover:bg-orange-500 w-full">
               Sign In
             </button>
+            {error ? (
+              <p className="text-red-500">
+                <small>{error}</small>
+              </p>
+            ) : (
+              <></>
+            )}
             <p className="text-center text-sm my-5">
               Do you have an account?{" "}
               <Link to="/register" className="text-theme font-semibold">
